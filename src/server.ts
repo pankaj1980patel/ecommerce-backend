@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import "dotenv/config";
+import appRoute from "./globals/routes/appRoutes";
 class Server {
   private app: Application;
   constructor(app: Application) {
@@ -15,8 +16,17 @@ class Server {
   private setupMiddleware(): void {
     this.app.use(express.json());
   }
-  private setupRoutes(): void {}
-  private setupGlobalError(): void {}
+  private setupRoutes(): void {
+    appRoute(this.app);
+  }
+  private setupGlobalError(): void {
+    this.app.all("*", (req, res, next) => {
+      res.status(404).json({
+        status: false,
+        message: `Can't find ${req.originalUrl} on this server.`
+      });
+    });
+  }
 
   private startServer() {
     const port = Number(process.env.PORT || 5050);
