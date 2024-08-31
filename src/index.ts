@@ -1,5 +1,7 @@
-import Server from "./server";
+import "express-async-errors";
 import express from "express";
+import Server from "./server";
+
 class ShopApplication {
   public run() {
     const app = express();
